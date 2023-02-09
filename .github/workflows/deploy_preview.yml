@@ -4,6 +4,7 @@ on: [pull_request, workflow_dispatch]
 
 jobs:
   deploy-preview:
+    permissions: write-all
     name: Build and Deploy preview on Netlify
     runs-on: ubuntu-latest
     steps:
