@@ -1,0 +1,33 @@
+name: Deploy Preview to Netlify
+
+on: [pull_request, workflow_dispatch]
+
+jobs:
+  deploy-preview:
+    name: Build and Deploy preview on Netlify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.10.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install modules
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1.2
+        with:
+          publish-dir: './build'
+          deploy-message: '#${{ github.event.pull_request.number }} - ${{ github.event.pull_request.title }}'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1
