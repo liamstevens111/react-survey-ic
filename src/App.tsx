@@ -1,8 +1,9 @@
 import React from 'react';
 import { useRoutes } from 'react-router-dom';
 
-import 'dummy.css';
 import 'assets/stylesheets/application.scss';
+
+import 'assets/fonts/Neuzeit-S-LT-Std-Book.ttf';
 
 import routes from 'routes';
 
