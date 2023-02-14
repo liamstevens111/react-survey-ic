@@ -11,7 +11,7 @@ type InputProps = {
 function Input({ name, label, type, className, onInputChange }: InputProps) {
   return (
     <>
-      <label className="text-white block my-5">
+      <label className="text-white text-left block my-5">
         {label}
         <input name={name} type={type} className={`${styles.input} ${className}`} onChange={onInputChange} />
       </label>

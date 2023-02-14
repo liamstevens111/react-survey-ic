@@ -18,11 +18,11 @@ const myChange2 = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HT
 function LoginScreen() {
   return (
     <div>
-      <img src={logo} alt="logo" />
-      <p className="text-white opacity-50">Sign in to Nimble</p>
+      <img className="inline-block" src={logo} alt="logo" />
+      <p className="text-white opacity-50 my-8">Sign in to Nimble</p>
       <form>
-        <Input name="email" label="Email" type="text" className="block h-14 w-80 pl-3" onInputChange={myChange} />
-        <Input name="password" label="Password" type="password" className="block h-14 w-80 pl-3" onInputChange={myChange2} />
+        <Input name="email" label="Email" type="text" className="block h-14 w-80 pl-3 my-3" onInputChange={myChange} />
+        <Input name="password" label="Password" type="password" className="block h-14 w-80 pl-3 my-3" onInputChange={myChange2} />
         <Button type="button" text="Sign in" className="h-14 w-80" onButtonClick={myFunc} />
       </form>
     </div>

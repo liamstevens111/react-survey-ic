@@ -11,6 +11,6 @@ describe('HomeScreen', () => {
     const mainHeadingElement = screen.getByTestId('app-main-heading');
 
     expect(mainHeadingElement).toBeInTheDocument();
-    expect(mainHeadingElement).toHaveTextContent('React Survey Application');
+    expect(mainHeadingElement).toHaveTextContent('Home Screen');
   });
 });
