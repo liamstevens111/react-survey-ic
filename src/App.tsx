@@ -9,11 +9,9 @@ const App = (): JSX.Element => {
   const appRoutes = useRoutes(routes);
 
   return (
-    <>
-      <div className="flex flex-col text-center p-0 m-0 h-screen items-center justify-center">
-        <main>{appRoutes}</main>
-      </div>
-    </>
+    <div>
+      <main className="flex flex-col p-0 m-0 h-screen items-center justify-center">{appRoutes}</main>
+    </div>
   );
 };
 
