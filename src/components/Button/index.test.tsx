@@ -15,7 +15,7 @@ describe('Button', () => {
     expect(buttonComponent).toHaveAttribute('type', 'button');
   });
 
-  it('renders a button with the given class', () => {
+  test('renders a button with the given class', () => {
     render(<Button text="Click me" type="button" className="primary" onButtonClick={handleButtonClick} />);
 
     const buttonComponent = screen.getByRole('button', { name: 'Click me' });
