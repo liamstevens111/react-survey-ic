@@ -1,10 +1,12 @@
+import { HTMLInputTypeAttribute } from 'react';
+
 import styles from './Input.module.scss';
 
 type InputProps = {
   name: string;
   label: string;
-  type: string;
-  className: string;
+  type?: HTMLInputTypeAttribute;
+  className?: string;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void;
 };
 
