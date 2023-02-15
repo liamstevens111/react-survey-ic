@@ -15,7 +15,9 @@ function LoginScreen() {
   return (
     <>
       <img className="inline-block" src={logo} alt="logo" />
-      <p className="text-white opacity-50 my-8">{t('login.sign_in')} to Nimble</p>
+      <p data-test-id="login-header" className="text-white opacity-50 my-8">
+        {t('login.sign_in')} to Nimble
+      </p>
       <form>
         <Input name="email" label={t('login.email')} type="text" className="block h-14 w-80 my-3" onInputChange={tempHandler} />
         <div className="relative w-80">
