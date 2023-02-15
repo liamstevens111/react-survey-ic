@@ -3,7 +3,7 @@ import styles from './Button.module.scss';
 type ButtonProps = {
   text: string;
   type: 'button' | 'submit' | 'reset';
-  className: string;
+  className?: string;
   onButtonClick: () => void;
 };
 
