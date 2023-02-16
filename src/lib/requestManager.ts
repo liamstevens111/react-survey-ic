@@ -4,6 +4,8 @@ export const defaultOptions: { responseType: ResponseType } = {
   responseType: 'json',
 };
 
+export type RequestParamsType = AxiosRequestConfig;
+
 /**
  * The main API access function that comes preconfigured with useful defaults.
  *
