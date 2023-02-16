@@ -1,16 +1,31 @@
 import { useTranslation } from 'react-i18next';
 
+import AuthAdapter from 'adapters/authAdapter';
 import logo from 'assets/images/logo.svg';
 import Button from 'components/Button';
 import Input from 'components/Input';
+import { setToken } from 'helpers/userToken';
 
 // TODO: Remove when login functionality implemented in #8
 const tempHandler = () => {
   return undefined;
 };
 
+// TODO: Remove after testing
+const performLogin = async () => {
+  const response = await AuthAdapter.login({ email: 'placeholder', password: 'placeholder' });
+
+  const {
+    attributes: { access_token: accessToken, refresh_token: refreshToken },
+  } = await response.data;
+
+  setToken({ accessToken: accessToken, refreshToken: refreshToken });
+};
+
 function LoginScreen() {
   const { t } = useTranslation('translation');
+
+  performLogin();
 
   return (
     <>
