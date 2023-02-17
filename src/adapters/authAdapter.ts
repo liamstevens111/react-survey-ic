@@ -16,7 +16,7 @@ class AuthAdapter extends BaseAdapter {
     };
     /* eslint-enable camelcase */
 
-    return this.prototype.postRequest(`${process.env.REACT_APP_API_ENDPOINT}/oauth/token`, { data: requestParams });
+    return this.prototype.postRequest('oauth/token', { data: requestParams });
   }
 }
 
