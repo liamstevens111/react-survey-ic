@@ -2,9 +2,9 @@ import styles from './Button.module.scss';
 
 type ButtonProps = {
   text: string;
-  type: 'button' | 'submit' | 'reset';
+  type?: 'button' | 'submit' | 'reset';
   className?: string;
-  onButtonClick: () => void;
+  onButtonClick?: () => void;
 };
 
 function Button({ text, type, className, onButtonClick }: ButtonProps) {
