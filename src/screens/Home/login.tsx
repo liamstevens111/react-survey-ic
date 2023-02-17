@@ -7,11 +7,43 @@ import Button from 'components/Button';
 import Input from 'components/Input';
 import { setToken } from 'helpers/userToken';
 
+enum InputFieldTypes {
+  EMAIL = 'Email',
+  PASSWORD = 'Password',
+}
+
+type Errors = {
+  Email?: string;
+  Password?: string;
+};
+
 function LoginScreen() {
   const { t } = useTranslation('translation');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
+
+  const isEmailValid = (inputEmail: string) => {
+    const emailRegEx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+
+    return emailRegEx.test(inputEmail);
+  };
+
+  const isPasswordValid = (inputPassword: string) => {
+    const passwordRegEx = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+    return passwordRegEx.test(inputPassword);
+  };
+
+  const removeError = (errorField: InputFieldTypes): Errors => {
+    console.log(errorField);
+    const newState: Errors = {
+      ...errors,
+    };
+    delete newState[errorField];
+    return newState;
+  };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -33,7 +65,22 @@ function LoginScreen() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    performLogin();
+
+    if (!isEmailValid(email)) {
+      setErrors({ ...errors, Email: 'Is invalid' });
+    } else {
+      removeError(InputFieldTypes.EMAIL);
+    }
+
+    if (!isPasswordValid(password)) {
+      setErrors({ ...errors, Password: 'Is invalid' });
+    } else {
+      removeError(InputFieldTypes.PASSWORD);
+    }
+
+    if (Object.keys(errors).length === 0) {
+      performLogin();
+    }
   };
 
   return (
