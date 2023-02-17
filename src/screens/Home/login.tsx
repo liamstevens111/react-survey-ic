@@ -6,11 +6,9 @@ import logo from 'assets/images/logo.svg';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import { setToken } from 'helpers/userToken';
+import { isEmailValid, isPasswordValid } from 'helpers/validators';
 
-enum InputFieldTypes {
-  EMAIL = 'Email',
-  PASSWORD = 'Password',
-}
+type InputField = 'Email' | 'Password';
 
 type Errors = {
   Email?: string;
@@ -24,25 +22,12 @@ function LoginScreen() {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
 
-  const isEmailValid = (inputEmail: string) => {
-    const emailRegEx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-
-    return emailRegEx.test(inputEmail);
-  };
-
-  const isPasswordValid = (inputPassword: string) => {
-    const passwordRegEx = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-
-    return passwordRegEx.test(inputPassword);
-  };
-
-  const removeError = (errorField: InputFieldTypes): Errors => {
-    console.log(errorField);
+  const removeError = (field: InputField) => {
     const newState: Errors = {
       ...errors,
     };
-    delete newState[errorField];
-    return newState;
+    delete newState[field];
+    setErrors(newState);
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,13 +54,13 @@ function LoginScreen() {
     if (!isEmailValid(email)) {
       setErrors({ ...errors, Email: 'Is invalid' });
     } else {
-      removeError(InputFieldTypes.EMAIL);
+      removeError('Email');
     }
 
     if (!isPasswordValid(password)) {
       setErrors({ ...errors, Password: 'Is invalid' });
     } else {
-      removeError(InputFieldTypes.PASSWORD);
+      removeError('Password');
     }
 
     if (Object.keys(errors).length === 0) {
@@ -86,7 +71,7 @@ function LoginScreen() {
   return (
     <>
       <img className="inline-block" src={logo} alt="logo" />
-      <p data-test-id="login-header" className="text-white opacity-50 my-8">
+      <p data-test-id="login-header" className="my-8 text-white opacity-50">
         {t('login.sign_in')} to Nimble
       </p>
       <form onSubmit={handleSubmit}>
@@ -95,7 +80,7 @@ function LoginScreen() {
           label={t('login.email')}
           type="text"
           value={email}
-          className="block h-14 w-80 my-3"
+          className="my-3 block h-14 w-80"
           onInputChange={(e) => handleEmailChange(e)}
         />
         <div className="relative w-80">
@@ -104,11 +89,11 @@ function LoginScreen() {
             label={t('login.password')}
             type="password"
             value={password}
-            className="block h-14 w-80 my-3"
+            className="my-3 block h-14 w-80"
             onInputChange={(e) => handlePasswordChange(e)}
           />
           {/* Change to React Router Link when implement #17 */}
-          <a href="." className="absolute text-white opacity-50 my-8 left-60 top-5">
+          <a href="." className="absolute left-60 top-5 my-8 text-white opacity-50">
             {t('login.forgot_password')}
           </a>
         </div>
