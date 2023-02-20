@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+import { AxiosError } from 'axios';
 
 import AuthAdapter from 'adapters/authAdapter';
 import logo from 'assets/images/logo.svg';
@@ -8,27 +11,16 @@ import Input from 'components/Input';
 import { setToken } from 'helpers/userToken';
 import { isEmailValid, isPasswordValid } from 'helpers/validators';
 
-type InputField = 'Email' | 'Password';
-
-type Errors = {
-  Email?: string;
-  Password?: string;
-};
+import { PASSWORD_MIN_LENGTH } from '../../constants';
 
 function LoginScreen() {
+  const navigate = useNavigate();
   const { t } = useTranslation('translation');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({});
-
-  const removeError = (field: InputField) => {
-    const newState: Errors = {
-      ...errors,
-    };
-    delete newState[field];
-    setErrors(newState);
-  };
+  const [errors, setErrors] = useState<string[]>([]);
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -39,31 +31,44 @@ function LoginScreen() {
   };
 
   const performLogin = async () => {
-    const response = await AuthAdapter.login({ email: email, password: password });
+    try {
+      const response = await AuthAdapter.login({ email: email, password: password });
 
-    const {
-      attributes: { access_token: accessToken, refresh_token: refreshToken },
-    } = await response.data;
+      const {
+        attributes: { access_token: accessToken, refresh_token: refreshToken },
+      } = await response.data;
 
-    setToken({ accessToken: accessToken, refreshToken: refreshToken });
+      setToken({ accessToken: accessToken, refreshToken: refreshToken });
+      navigate('/');
+    } catch (error) {
+      let errorMessage = '';
+
+      if (error instanceof Error) {
+        errorMessage = (error as AxiosError).response?.data?.errors[0]?.detail || error.message || 'Internal error';
+      }
+      setErrors([errorMessage]);
+    } finally {
+      setFormSubmitted(false);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const formErrors = [];
+
     if (!isEmailValid(email)) {
-      setErrors({ ...errors, Email: 'Is invalid' });
-    } else {
-      removeError('Email');
+      formErrors.push(t('login.invalid-email'));
     }
 
     if (!isPasswordValid(password)) {
-      setErrors({ ...errors, Password: 'Is invalid' });
-    } else {
-      removeError('Password');
+      formErrors.push(t('login.invalid-password', { passwordMinLength: PASSWORD_MIN_LENGTH }));
     }
 
-    if (Object.keys(errors).length === 0) {
+    setErrors(formErrors);
+
+    if (formErrors.length === 0) {
+      setFormSubmitted(true);
       performLogin();
     }
   };
@@ -72,8 +77,20 @@ function LoginScreen() {
     <>
       <img className="inline-block" src={logo} alt="logo" />
       <p data-test-id="login-header" className="my-8 text-white opacity-50">
-        {t('login.sign_in')} to Nimble
+        {t('login.sign-in')} to Nimble
       </p>
+
+      <div>
+        {errors.length > 0 &&
+          errors.map((error) => {
+            return (
+              <p className="text-center text-red-700" key={error.toString()}>
+                {error}
+              </p>
+            );
+          })}
+      </div>
+
       <form onSubmit={handleSubmit}>
         <Input
           name="email"
@@ -81,7 +98,7 @@ function LoginScreen() {
           type="text"
           value={email}
           className="my-3 block h-14 w-80"
-          onInputChange={(e) => handleEmailChange(e)}
+          onInputChange={handleEmailChange}
         />
         <div className="relative w-80">
           <Input
@@ -90,14 +107,14 @@ function LoginScreen() {
             type="password"
             value={password}
             className="my-3 block h-14 w-80"
-            onInputChange={(e) => handlePasswordChange(e)}
+            onInputChange={handlePasswordChange}
           />
           {/* Change to React Router Link when implement #17 */}
           <a href="." className="absolute left-60 top-5 my-8 text-white opacity-50">
-            {t('login.forgot_password')}
+            {t('login.forgot-password')}
           </a>
         </div>
-        <Button text={t('login.sign_in')} className="h-14 w-80" />
+        <Button text={t('login.sign-in')} className="h-14 w-80" disabled={formSubmitted} />
       </form>
     </>
   );

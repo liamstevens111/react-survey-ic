@@ -1,8 +1,10 @@
 {
   "login": {
-    "sign_in": "Sign in",
+    "sign-in": "Sign in",
     "email": "Email",
     "password": "Password",
-    "forgot_password": "Forgot?"
+    "forgot-password": "Forgot?",
+    "invalid-email": "Email has invalid format",
+    "invalid-password": "Password should be at least {{passwordMinLength}}"
   }
 }
