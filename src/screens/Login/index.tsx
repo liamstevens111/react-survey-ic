@@ -41,10 +41,10 @@ function LoginScreen() {
       setToken({ accessToken: accessToken, refreshToken: refreshToken });
       navigate('/');
     } catch (error) {
-      let errorMessage = '';
+      let errorMessage = 'There was a problem receiving a response from the server';
 
       if (error instanceof Error) {
-        errorMessage = (error as AxiosError).response?.data?.errors[0]?.detail || error.message || 'Internal error';
+        errorMessage = (error as AxiosError).response?.data?.errors[0]?.detail || error.cause || errorMessage;
       }
       setErrors([errorMessage]);
     } finally {
