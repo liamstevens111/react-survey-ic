@@ -1,6 +1,8 @@
 {
-  "sample_page": {
-    "message": "Edit {{codeSample}} and save to reload",
-    "learn_react": "Learn React"
+  "login": {
+    "sign_in": "Sign in",
+    "email": "Email",
+    "password": "Password",
+    "forgot_password": "Forgot?"
   }
 }
