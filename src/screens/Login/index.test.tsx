@@ -1,3 +1,6 @@
+/* eslint-disable camelcase */
+
+import * as router from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 
 import { render, screen, waitFor } from '@testing-library/react';
@@ -6,13 +9,42 @@ import nock from 'nock';
 
 import LoginScreen from '.';
 
-afterAll(() => {
-  nock.cleanAll();
-  nock.restore();
-});
+const commonLoginParams = {
+  grant_type: 'password',
+  client_id: process.env.REACT_APP_API_CLIENT_ID,
+  client_secret: process.env.REACT_APP_API_CLIENT_SECRET,
+};
+
+const commonLoginResponse = {
+  data: {
+    id: '18339',
+    type: 'token',
+    attributes: {
+      access_token: 'test_access_token',
+      token_type: 'Bearer',
+      expires_in: 7200,
+      refresh_token: 'test_refresh_token',
+      created_at: 1677045997,
+    },
+  },
+};
+
+const testCredentials = {
+  email: 'testemail@gmail.com',
+  password: 'password123',
+};
+
+const useNavigateMock = jest.fn();
 
 describe('LoginScreen', () => {
-  test('submit an an empty email and password and receive errors', async () => {
+  afterAll(() => {
+    nock.cleanAll();
+    nock.restore();
+
+    jest.restoreAllMocks();
+  });
+
+  test('given an empty email and password in the login form, displays both errors', async () => {
     render(<LoginScreen />, { wrapper: BrowserRouter });
 
     const submitButton = screen.getByRole('button', { name: 'login.sign-in' });
@@ -23,13 +55,8 @@ describe('LoginScreen', () => {
     expect(screen.getByText('login.invalid-password')).toBeInTheDocument();
   });
 
-  test('submit incorrect details', async () => {
-    render(<LoginScreen />, { wrapper: BrowserRouter });
-
-    const formData = {
-      email: 'testemail@gmail.com',
-      password: 'password123',
-    };
+  test('given correct credentials, redirects to the home page', async () => {
+    jest.spyOn(router, 'useNavigate').mockImplementation(() => useNavigateMock);
 
     nock(`${process.env.REACT_APP_API_ENDPOINT}`)
       .defaultReplyHeaders({
@@ -37,11 +64,40 @@ describe('LoginScreen', () => {
         'access-control-allow-credentials': 'true',
       })
       .post('/oauth/token', {
-        email: formData.email,
-        password: formData.password,
-        grant_type: 'password',
-        client_id: process.env.REACT_APP_API_CLIENT_ID,
-        client_secret: process.env.REACT_APP_API_CLIENT_SECRET,
+        ...commonLoginParams,
+        ...testCredentials,
+      })
+      .reply(200, {
+        ...commonLoginResponse,
+      });
+
+    render(<LoginScreen />, { wrapper: BrowserRouter });
+
+    const emailField = screen.getByLabelText('login.email');
+    const passwordField = screen.getByLabelText('login.password');
+    const submitButton = screen.getByRole('button', { name: 'login.sign-in' });
+
+    await userEvent.type(emailField, testCredentials.email);
+    await userEvent.type(passwordField, testCredentials.password);
+
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(useNavigateMock).toHaveBeenCalledWith('/');
+    });
+  });
+
+  test('given INCORRECT credentials, displays the error from API response', async () => {
+    render(<LoginScreen />, { wrapper: BrowserRouter });
+
+    nock(`${process.env.REACT_APP_API_ENDPOINT}`)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true',
+      })
+      .post('/oauth/token', {
+        ...commonLoginParams,
+        ...testCredentials,
       })
       .reply(400, {
         errors: [
@@ -56,36 +112,13 @@ describe('LoginScreen', () => {
     const passwordField = screen.getByLabelText('login.password');
     const submitButton = screen.getByRole('button', { name: 'login.sign-in' });
 
-    await userEvent.type(emailField, formData.email);
-    await userEvent.type(passwordField, formData.password);
+    await userEvent.type(emailField, testCredentials.email);
+    await userEvent.type(passwordField, testCredentials.password);
 
     await userEvent.click(submitButton);
+
     await waitFor(() => {
       expect(screen.getByText('Your email or password is incorrect. Please try again.')).toBeInTheDocument();
     });
   });
-
-  // test('Allows form submission of email and password', async () => {
-  //   const requestData = {
-  //     email: 'testemail@gmail.com',
-  //     password: 'password123',
-  //   };
-
-  //   render(<LoginScreen />, { wrapper: BrowserRouter });
-
-  //   const emailField = screen.getByLabelText('login.email');
-  //   const passwordField = screen.getByLabelText('login.password');
-  //   const submitButton = screen.getByRole('button', { name: 'login.sign-in' });
-
-  //   await userEvent.type(emailField, 'testemail@gmail.com');
-  //   await userEvent.type(passwordField, 'password123');
-
-  //   const requestSpy = jest.spyOn(axios, 'request').mockImplementation(() => Promise.resolve({}));
-
-  //   await userEvent.click(submitButton);
-
-  //   expect(axios.request).toHaveBeenCalledWith(requestData);
-
-  //   requestSpy.mockRestore();
-  // });
 });
