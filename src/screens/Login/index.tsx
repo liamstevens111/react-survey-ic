@@ -38,7 +38,10 @@ function LoginScreen() {
         attributes: { access_token: accessToken, refresh_token: refreshToken },
       } = await response.data;
 
-      setToken({ accessToken: accessToken, refreshToken: refreshToken });
+      /* eslint-disable camelcase */
+      setToken({ access_token: accessToken, refresh_token: refreshToken });
+      /* eslint-enable camelcase */
+
       navigate('/');
     } catch (error) {
       let errorMessage = 'There was a problem receiving a response from the server';
