@@ -10,7 +10,12 @@ type ButtonProps = {
 
 function Button({ text, type, className, disabled, onButtonClick }: ButtonProps) {
   return (
-    <button className={`${styles.button} ${className}`} disabled={disabled || false} type={type} onClick={onButtonClick}>
+    <button
+      className={`${styles.button} ${className}`}
+      disabled={disabled || false}
+      type={type || 'submit'}
+      onClick={onButtonClick}
+    >
       {text}
     </button>
   );

@@ -83,7 +83,7 @@ function LoginScreen() {
         {t('login.sign-in')} to Nimble
       </p>
 
-      <div>
+      <div className="errors">
         {errors.length > 0 &&
           errors.map((error) => {
             return (
@@ -112,12 +112,13 @@ function LoginScreen() {
             className="my-3 block h-14 w-80"
             onInputChange={handlePasswordChange}
           />
-          {/* Change to React Router Link when implement #17 */}
+
+          {/* TODO: Change to React Router Link when implement #17 */}
           <a href="." className="absolute left-60 top-5 my-8 text-white opacity-50">
             {t('login.forgot-password')}
           </a>
         </div>
-        <Button text={t('login.sign-in')} className="h-14 w-80" disabled={formSubmitted} />
+        <Button text={t('login.sign-in')} className="h-14 w-80" type={'submit'} disabled={formSubmitted} />
       </form>
     </>
   );
