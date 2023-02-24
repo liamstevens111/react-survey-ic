@@ -1,19 +1,12 @@
 import nock from 'nock';
 
-import AuthAdapter from './authAdapter';
+import AuthAdapter, { commonParams } from './authAdapter';
 
 /* eslint-disable camelcase */
-const testCredentials = {
+const mockLoginCredentials = {
   email: 'testemail@gmail.com',
   password: 'password123',
 };
-
-const commonLoginParams = {
-  grant_type: 'password',
-  client_id: process.env.REACT_APP_API_CLIENT_ID,
-  client_secret: process.env.REACT_APP_API_CLIENT_SECRET,
-};
-/* eslint-enable camelcase */
 
 describe('AuthAdapter', () => {
   afterAll(() => {
@@ -21,7 +14,7 @@ describe('AuthAdapter', () => {
     nock.restore();
   });
 
-  describe('login', () => {
+  describe('loginWithEmailPassword', () => {
     test('The login endpoint is called with credientials from the request', async () => {
       const scope = nock(`${process.env.REACT_APP_API_ENDPOINT}`)
         .defaultReplyHeaders({
@@ -29,13 +22,34 @@ describe('AuthAdapter', () => {
           'access-control-allow-credentials': 'true',
         })
         .post('/oauth/token', {
-          ...testCredentials,
-          ...commonLoginParams,
+          ...mockLoginCredentials,
+          ...commonParams,
+          grant_type: 'password',
         })
         .reply(200);
 
       expect(scope.isDone()).toBe(false);
-      await AuthAdapter.loginWithEmailPassword({ ...testCredentials });
+      await AuthAdapter.loginWithEmailPassword({ ...mockLoginCredentials });
+      expect(scope.isDone()).toBe(true);
+    });
+  });
+
+  describe('loginWithRefreshToken', () => {
+    test('The refresh token endpoint is called with refresh token from the request', async () => {
+      const scope = nock(`${process.env.REACT_APP_API_ENDPOINT}`)
+        .defaultReplyHeaders({
+          'access-control-allow-origin': '*',
+          'access-control-allow-credentials': 'true',
+        })
+        .post('/oauth/token', {
+          refresh_token: 'refresh_token',
+          ...commonParams,
+          grant_type: 'refresh_token',
+        })
+        .reply(200);
+
+      expect(scope.isDone()).toBe(false);
+      await AuthAdapter.loginWithRefreshToken('refresh_token');
       expect(scope.isDone()).toBe(true);
     });
   });

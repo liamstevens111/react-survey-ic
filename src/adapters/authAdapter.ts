@@ -5,14 +5,19 @@ type LoginAuthType = {
   password: string;
 };
 
+/* eslint-disable camelcase */
+export const commonParams = {
+  client_id: process.env.REACT_APP_API_CLIENT_ID,
+  client_secret: process.env.REACT_APP_API_CLIENT_SECRET,
+};
+/* eslint-enable camelcase */
 class AuthAdapter extends BaseAdapter {
-  static loginWithEmailPassword(params: LoginAuthType) {
+  static loginWithEmailPassword(authParams: LoginAuthType) {
     /* eslint-disable camelcase */
     const requestParams = {
-      ...params,
+      ...commonParams,
+      ...authParams,
       grant_type: 'password',
-      client_id: process.env.REACT_APP_API_CLIENT_ID,
-      client_secret: process.env.REACT_APP_API_CLIENT_SECRET,
     };
     /* eslint-enable camelcase */
 
@@ -22,10 +27,9 @@ class AuthAdapter extends BaseAdapter {
   static loginWithRefreshToken(refreshToken: string) {
     /* eslint-disable camelcase */
     const requestParams = {
+      ...commonParams,
       refresh_token: refreshToken,
       grant_type: 'refresh_token',
-      client_id: process.env.REACT_APP_API_CLIENT_ID,
-      client_secret: process.env.REACT_APP_API_CLIENT_SECRET,
     };
     /* eslint-enable camelcase */
 
