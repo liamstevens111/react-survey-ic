@@ -1,5 +1,10 @@
 import axios, { Method as HTTPMethod, ResponseType, AxiosRequestConfig, AxiosResponse } from 'axios';
 
+import AuthAdapter from 'adapters/authAdapter';
+import { setToken, getToken, clearToken } from 'helpers/userToken';
+
+import { LOGIN_URL } from '../constants';
+
 export const defaultOptions: { responseType: ResponseType } = {
   responseType: 'json',
 };
@@ -27,6 +32,56 @@ const requestManager = (
     ...defaultOptions,
     ...requestOptions,
   };
+
+  axios.interceptors.request.use(
+    function (config) {
+      const userToken = getToken();
+
+      if (userToken?.access_token) {
+        config.headers.Authorization = `Bearer ${userToken.access_token}`;
+      }
+      return config;
+    },
+    function (error) {
+      return Promise.reject(error);
+    }
+  );
+
+  axios.interceptors.response.use(
+    function (response) {
+      return response;
+    },
+    async function (error) {
+      if (error.response?.status === 401) {
+        const userToken = getToken();
+
+        clearToken();
+
+        if (userToken?.refresh_token) {
+          try {
+            const response = await AuthAdapter.loginWithRefreshToken(userToken.refresh_token);
+
+            const {
+              attributes: { access_token: accessToken, refresh_token: refreshToken },
+            } = await response.data;
+
+            /* eslint-disable camelcase */
+            setToken({ access_token: accessToken, refresh_token: refreshToken });
+            /* eslint-enable camelcase */
+
+            error.config.headers.Authorization = `Bearer ${accessToken}`;
+            return axios.request(error.config);
+          } catch {
+            window.location.href = LOGIN_URL;
+          }
+        }
+
+        window.location.href = LOGIN_URL;
+      }
+
+      return Promise.reject(error);
+    }
+  );
 
   return axios.request(requestParams).then((response: AxiosResponse) => {
     return response.data;

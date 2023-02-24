@@ -59,7 +59,7 @@ describe('LoginScreen', () => {
   });
 
   test('given an empty email and password in the login form, displays both errors', async () => {
-    const mockLogin = jest.spyOn(AuthAdapter, 'login');
+    const mockLogin = jest.spyOn(AuthAdapter, 'loginWithEmailPassword');
 
     render(<LoginScreen />, { wrapper: BrowserRouter });
 
@@ -114,7 +114,7 @@ describe('LoginScreen', () => {
   });
 
   test('given INCORRECT credentials, displays the error from the API response', async () => {
-    const mockLogin = jest.spyOn(AuthAdapter, 'login');
+    const mockLogin = jest.spyOn(AuthAdapter, 'loginWithEmailPassword');
 
     render(<LoginScreen />, { wrapper: BrowserRouter });
 

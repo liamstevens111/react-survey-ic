@@ -35,7 +35,7 @@ describe('AuthAdapter', () => {
         .reply(200);
 
       expect(scope.isDone()).toBe(false);
-      await AuthAdapter.login({ ...testCredentials });
+      await AuthAdapter.loginWithEmailPassword({ ...testCredentials });
       expect(scope.isDone()).toBe(true);
     });
   });

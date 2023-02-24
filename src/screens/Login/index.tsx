@@ -32,7 +32,7 @@ function LoginScreen() {
 
   const performLogin = async () => {
     try {
-      const response = await AuthAdapter.login({ email: email, password: password });
+      const response = await AuthAdapter.loginWithEmailPassword({ email: email, password: password });
 
       const {
         attributes: { access_token: accessToken, refresh_token: refreshToken },
