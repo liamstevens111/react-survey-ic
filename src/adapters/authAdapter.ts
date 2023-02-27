@@ -35,6 +35,10 @@ class AuthAdapter extends BaseAdapter {
 
     return this.prototype.postRequest('oauth/token', { data: requestParams });
   }
+
+  static getUser() {
+    return this.prototype.getRequest('me', {});
+  }
 }
 
 export default AuthAdapter;
