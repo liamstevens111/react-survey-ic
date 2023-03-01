@@ -3,12 +3,12 @@ import requestManager, { RequestParamsType } from 'lib/requestManager';
 class BaseAdapter {
   static baseUrl = process.env.REACT_APP_API_ENDPOINT;
 
-  getRequest(endpoint: string, params: RequestParamsType) {
-    return requestManager('GET', `${BaseAdapter.baseUrl}/${endpoint}`, params);
+  getRequest(endpoint: string, requestOption: RequestParamsType) {
+    return requestManager('GET', `${BaseAdapter.baseUrl}/${endpoint}`, requestOption);
   }
 
-  postRequest(endpoint: string, params: RequestParamsType) {
-    return requestManager('POST', `${BaseAdapter.baseUrl}/${endpoint}`, params);
+  postRequest(endpoint: string, requestOption: RequestParamsType) {
+    return requestManager('POST', `${BaseAdapter.baseUrl}/${endpoint}`, requestOption);
   }
 }
 
