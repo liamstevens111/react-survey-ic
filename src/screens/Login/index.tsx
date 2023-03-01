@@ -44,7 +44,7 @@ function LoginScreen() {
 
       navigate('/');
     } catch (error) {
-      let errorMessage = 'There was a problem receiving a response from the server';
+      let errorMessage = t('login.generic-server-error');
 
       if (error instanceof Error) {
         errorMessage = (error as AxiosError).response?.data?.errors[0]?.detail || error.cause || errorMessage;

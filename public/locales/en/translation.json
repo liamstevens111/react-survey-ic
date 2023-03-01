@@ -5,6 +5,7 @@
     "password": "Password",
     "forgot-password": "Forgot?",
     "invalid-email": "Email has invalid format",
-    "invalid-password": "Password should be at least {{passwordMinLength}}"
+    "invalid-password": "Password should be at least {{passwordMinLength}}",
+    "generic-server-error": "There was a problem receiving a response from the server"
   }
 }
