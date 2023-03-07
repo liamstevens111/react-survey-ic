@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Navigate, Outlet, useOutletContext } from 'react-router-dom';
 
-import AuthAdapter from 'adapters/authAdapter';
-import { getToken } from 'helpers/userToken';
+import { getItem } from 'helpers/localStorage';
 import type { User } from 'types/User';
 
 type ContextType = User;
@@ -15,24 +14,18 @@ function PrivateRoutes() {
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
-      const token = getToken().access_token;
-
-      if (!token) {
-        setLoading(false);
-      } else {
-        const response = await AuthAdapter.getUser();
-
-        const data = await response.data;
-
-        setUser(data.attributes);
-        setLoading(false);
+      const userProfile = getItem('UserProfile');
+      if (userProfile?.user) {
+        setUser({ ...userProfile.user });
       }
+
+      setLoading(false);
     };
     fetchCurrentUser();
   }, []);
 
   if (loading) {
-    return null;
+    return <h3>Loading...</h3>;
   }
 
   return user ? <Outlet context={user} /> : <Navigate to={LOGIN_URL} />;

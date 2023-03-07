@@ -1,7 +1,7 @@
 import axios, { Method as HTTPMethod, ResponseType, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import AuthAdapter from 'adapters/authAdapter';
-import { setToken, getToken, clearToken } from 'helpers/userToken';
+import { setItem, getItem, clearItem } from 'helpers/localStorage';
 
 import { LOGIN_URL } from '../constants';
 
@@ -35,10 +35,10 @@ const requestManager = (
 
   axios.interceptors.request.use(
     function (config) {
-      const userToken = getToken();
+      const userProfile = getItem('UserProfile');
 
-      if (userToken?.access_token) {
-        config.headers.Authorization = `Bearer ${userToken.access_token}`;
+      if (userProfile?.auth?.access_token) {
+        config.headers.Authorization = `Bearer ${userProfile.auth.access_token}`;
       }
       return config;
     },
@@ -53,23 +53,21 @@ const requestManager = (
     },
     async function (error) {
       if (error.response?.status === 401) {
-        const userToken = getToken();
+        const userProfile = getItem('UserProfile');
 
-        clearToken();
+        clearItem('UserProfile');
 
-        if (userToken?.refresh_token) {
+        if (userProfile?.auth?.refresh_token) {
           try {
-            const response = await AuthAdapter.loginWithRefreshToken(userToken.refresh_token);
+            const response = await AuthAdapter.loginWithRefreshToken(userProfile.auth.refresh_token);
 
-            const {
-              attributes: { access_token: accessToken, refresh_token: refreshToken },
-            } = await response.data;
+            const { attributes: authInfo } = await response.data;
 
             /* eslint-disable camelcase */
-            setToken({ access_token: accessToken, refresh_token: refreshToken });
+            setItem('UserProfile', { ...userProfile, auth: authInfo });
             /* eslint-enable camelcase */
 
-            error.config.headers.Authorization = `Bearer ${accessToken}`;
+            error.config.headers.Authorization = `Bearer ${authInfo.accessToken}`;
             return axios.request(error.config);
           } catch {
             window.location.href = LOGIN_URL;
