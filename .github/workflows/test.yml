@@ -33,13 +33,13 @@ jobs:
       - name: Run integration tests
         run: npm run cypress
 
+      - name: Upload any cypress failures
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: cypress-output
-          path: |
-          cypress/videos/
-          cypress/screenshots/
+          path: cypress/videos
+          retention-days: 5
 
       - name: Merge code coverage reports
         run: npm run test:merge-coverage
