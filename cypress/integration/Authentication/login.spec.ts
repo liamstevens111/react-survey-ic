@@ -7,10 +7,8 @@ describe('User Authentication', () => {
     });
   });
 
-  // TODO: The below test fail on CI/CD with the use of Intercept
-
-  context('given valid credentials', () => {
-    it('redirects to the home page', () => {
+  context('login with email and password', () => {
+    it('given correct credentials, redirects to the home page', () => {
       cy.intercept('POST', '/oauth/token/', {
         statusCode: 200,
         fixture: 'Authentication/valid-credentials.json',
@@ -26,27 +24,8 @@ describe('User Authentication', () => {
         expect(location.pathname).to.eq('/');
       });
     });
-  });
 
-  context('given NO credentials entered', () => {
-    it('shows field validation errors', () => {
-      cy.visit('/login');
-
-      cy.get('button[type="submit"]').click();
-
-      cy.get('.errors').should('be.visible');
-
-      cy.get('.errors').within(() => {
-        cy.contains('Email has invalid format');
-        cy.contains('Password should be at least');
-      });
-    });
-  });
-
-  // TODO: The below test fail on CI/CD with the use of Intercept
-
-  context('given INVALID credentials', () => {
-    it('shows login error', () => {
+    it('given INCORRECT credentials, shows login error', () => {
       cy.intercept('POST', '/oauth/token/', {
         statusCode: 400,
         fixture: 'Authentication/invalid-credentials.json',
@@ -66,6 +45,19 @@ describe('User Authentication', () => {
 
       cy.get('.errors').within(() => {
         cy.findByText('Your email or password is incorrect. Please try again.').should('exist');
+      });
+    });
+
+    it('given NO credentials entered, shows field validation errors', () => {
+      cy.visit('/login');
+
+      cy.get('button[type="submit"]').click();
+
+      cy.get('.errors').should('be.visible');
+
+      cy.get('.errors').within(() => {
+        cy.contains('Email has invalid format');
+        cy.contains('Password should be at least');
       });
     });
   });
