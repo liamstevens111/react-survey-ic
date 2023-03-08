@@ -6,16 +6,17 @@ type InputProps = {
   name: string;
   label: string;
   type?: HTMLInputTypeAttribute;
+  value?: string;
   className?: string;
-  onInputChange: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-function Input({ name, label, type, className, onInputChange }: InputProps) {
+function Input({ name, label, type, value, className, onInputChange }: InputProps) {
   return (
     <>
-      <label className="text-white text-left block my-5">
+      <label className="my-5 block text-left text-white">
         {label}
-        <input name={name} type={type} className={`${styles.input} ${className}`} onChange={onInputChange} />
+        <input name={name} type={type} value={value} className={`${styles.input} ${className}`} onChange={onInputChange} />
       </label>
     </>
   );

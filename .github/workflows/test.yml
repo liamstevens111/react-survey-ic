@@ -2,6 +2,11 @@ name: Test
 
 on: pull_request
 
+env:
+  REACT_APP_API_ENDPOINT: ${{ secrets.API_ENDPOINT }}
+  REACT_APP_API_CLIENT_ID: ${{ secrets.API_CLIENT_ID }}
+  REACT_APP_API_CLIENT_SECRET: ${{ secrets.API_CLIENT_SECRET }}
+
 jobs:
   test:
     name: Run linters and tests
@@ -32,6 +37,14 @@ jobs:
 
       - name: Run integration tests
         run: npm run cypress
+
+      - name: Upload any cypress failures
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-output
+          path: cypress/videos
+          retention-days: 5
 
       - name: Merge code coverage reports
         run: npm run test:merge-coverage
