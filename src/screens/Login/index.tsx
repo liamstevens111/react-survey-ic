@@ -103,7 +103,7 @@ function LoginScreen() {
           className="my-3 block h-14 w-80"
           onInputChange={handleEmailChange}
         />
-        <div className="relative w-80">
+        <div className="relative">
           <Input
             name="password"
             label={t('login.password')}
@@ -118,7 +118,7 @@ function LoginScreen() {
             {t('login.forgot-password')}
           </a>
         </div>
-        <Button text={t('login.sign-in')} className="h-14 w-80" type={'submit'} disabled={formSubmitted} />
+        <Button text={t('login.sign-in')} className="h-14 w-80" type="submit" disabled={formSubmitted} />
       </form>
     </>
   );
