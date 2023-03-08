@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Navigate, Outlet, useOutletContext } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
+import Header from 'components/Header';
 import { getItem } from 'helpers/localStorage';
 import type { User } from 'types/User';
-
-type ContextType = User;
 
 import { LOGIN_URL } from '../../constants';
 
@@ -16,7 +15,7 @@ function PrivateRoute() {
     const fetchCurrentUser = async () => {
       const userProfile = getItem('UserProfile');
       if (userProfile?.user) {
-        setUser({ ...userProfile.user });
+        setUser({ name: userProfile.user.name, email: userProfile.user.email, avatarUrl: userProfile.user.avatar_url });
       }
 
       setLoading(false);
@@ -28,11 +27,14 @@ function PrivateRoute() {
     return <h3>Loading...</h3>;
   }
 
-  return user ? <Outlet context={user} /> : <Navigate to={LOGIN_URL} />;
+  return user ? (
+    <>
+      <Header user={user} />
+      <Outlet />
+    </>
+  ) : (
+    <Navigate to={LOGIN_URL} />
+  );
 }
 
-export default PrivateRoute;
-
-export function useUser() {
-  return useOutletContext<ContextType>();
-}
+export default PrivateRoutes;
