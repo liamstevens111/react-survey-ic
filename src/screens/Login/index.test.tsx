@@ -19,6 +19,15 @@ const commonLoginParams = {
 const mockTokenData = {
   access_token: 'test_access_token',
   refresh_token: 'test_refresh_token',
+  token_type: 'Bearer',
+  expires_in: 7200,
+  created_at: 1677045997,
+};
+
+const mockUserProfileData = {
+  email: 'testemail@gmail.com',
+  name: 'TestName',
+  avatar_url: 'https://secure.gravatar.com/avatar/6733d09432e89459dba795de8312ac2d',
 };
 
 const commonLoginResponse = {
@@ -26,10 +35,19 @@ const commonLoginResponse = {
     id: '18339',
     type: 'token',
     attributes: {
-      token_type: 'Bearer',
-      expires_in: 7200,
-      created_at: 1677045997,
       ...mockTokenData,
+    },
+  },
+};
+
+const commonUserProfileResponse = {
+  data: {
+    id: '1',
+    type: 'user',
+    attributes: {
+      email: 'testemail@gmail.com',
+      name: 'TestName',
+      avatar_url: 'https://secure.gravatar.com/avatar/6733d09432e89459dba795de8312ac2d',
     },
   },
 };
@@ -59,7 +77,7 @@ describe('LoginScreen', () => {
   });
 
   test('given an empty email and password in the login form, displays both errors', async () => {
-    const mockLogin = jest.spyOn(AuthAdapter, 'login');
+    const mockLogin = jest.spyOn(AuthAdapter, 'loginWithEmailPassword');
 
     render(<LoginScreen />, { wrapper: BrowserRouter });
 
@@ -80,6 +98,7 @@ describe('LoginScreen', () => {
       .defaultReplyHeaders({
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true',
+        'access-control-allow-headers': 'Authorization',
       })
       .post('/oauth/token', {
         ...commonLoginParams,
@@ -87,7 +106,11 @@ describe('LoginScreen', () => {
       })
       .reply(200, {
         ...commonLoginResponse,
-      });
+      })
+      .options('/me')
+      .reply(204)
+      .get('/me')
+      .reply(200, { ...commonUserProfileResponse });
 
     render(<LoginScreen />, { wrapper: BrowserRouter });
 
@@ -105,7 +128,10 @@ describe('LoginScreen', () => {
     expect(submitButton).toHaveAttribute('disabled');
 
     await waitFor(() => {
-      expect(localStorage.setItem).toHaveBeenLastCalledWith('UserToken', JSON.stringify({ ...mockTokenData }));
+      expect(localStorage.setItem).toHaveBeenLastCalledWith(
+        'UserProfile',
+        JSON.stringify({ auth: mockTokenData, user: mockUserProfileData })
+      );
     });
 
     await waitFor(() => {
@@ -114,7 +140,7 @@ describe('LoginScreen', () => {
   });
 
   test('given INCORRECT credentials, displays the error from the API response', async () => {
-    const mockLogin = jest.spyOn(AuthAdapter, 'login');
+    const mockLogin = jest.spyOn(AuthAdapter, 'loginWithEmailPassword');
 
     render(<LoginScreen />, { wrapper: BrowserRouter });
 
@@ -148,7 +174,7 @@ describe('LoginScreen', () => {
     expect(mockLogin).toBeCalled();
 
     await waitFor(() => {
-      expect(localStorage.setItem).not.toHaveBeenLastCalledWith('UserToken', JSON.stringify({ ...mockTokenData }));
+      expect(localStorage.setItem).not.toHaveBeenLastCalledWith('UserProfile', JSON.stringify({ ...mockTokenData }));
     });
 
     await waitFor(() => {
