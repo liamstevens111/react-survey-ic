@@ -47,6 +47,15 @@ class AuthAdapter extends BaseAdapter {
     return this.prototype.postRequest('oauth/revoke', { data: requestParams });
   }
 
+  static resetPassword(email: string) {
+    const requestParams = {
+      ...commonParams,
+      user: { email: email },
+    };
+
+    return this.prototype.postRequest('passwords', { data: requestParams });
+  }
+
   static getUser() {
     return this.prototype.getRequest('me', {});
   }
