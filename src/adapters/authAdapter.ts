@@ -36,6 +36,17 @@ class AuthAdapter extends BaseAdapter {
     return this.prototype.postRequest('oauth/token', { data: requestParams });
   }
 
+  static logout(accessToken: string) {
+    /* eslint-disable camelcase */
+    const requestParams = {
+      ...commonParams,
+      token: accessToken,
+    };
+    /* eslint-enable camelcase */
+
+    return this.prototype.postRequest('oauth/revoke', { data: requestParams });
+  }
+
   static getUser() {
     return this.prototype.getRequest('me', {});
   }
