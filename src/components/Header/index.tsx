@@ -1,3 +1,7 @@
+import { useState } from 'react';
+
+import logo from 'assets/images/logo.svg';
+import Sidebar from 'components/Sidebar';
 import { User } from 'types/User';
 
 type HeaderProps = {
@@ -5,10 +9,22 @@ type HeaderProps = {
 };
 
 function Header({ user }: HeaderProps) {
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+
   return (
-    <header className="flex w-screen flex-row items-center justify-between p-0">
-      <div className="">Test logo for {user.email}</div>
-      <div className="profile-image">Test image for {user.name}</div>
+    <header className="fixed top-5 flex w-11/12 flex-row items-center justify-between p-0">
+      <div>
+        <img src={logo} alt="logo"></img>
+      </div>
+      <div onClick={() => setSidebarVisible(!sidebarVisible)} role="presentation">
+        {sidebarVisible ? (
+          <Sidebar user={user} />
+        ) : (
+          <div>
+            <img className="cursor-pointer rounded-full" height={36} width={36} src={user.avatarUrl} alt="profile"></img>
+          </div>
+        )}
+      </div>
     </header>
   );
 }
