@@ -8,8 +8,8 @@ function Survey({ title, description, coverImageUrl }: SurveyProps) {
   return (
     <>
       <img src={coverImageUrl} alt="cover" />
-      <p> {title}</p>
-      <p> {description}</p>
+      <p className="text-white"> {title}</p>
+      <p className="text-white"> {description}</p>
     </>
   );
 }

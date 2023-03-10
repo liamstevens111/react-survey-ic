@@ -45,7 +45,11 @@ const HomeScreen = (): JSX.Element => {
         Today - Monday, June 15
       </div>
 
-      {surveys.length > 0 && <SurveyList surveys={surveys} />}
+      {surveys.length > 0 && (
+        <section>
+          <SurveyList surveys={surveys} />
+        </section>
+      )}
     </>
   );
 };
