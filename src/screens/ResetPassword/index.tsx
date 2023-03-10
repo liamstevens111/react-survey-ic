@@ -23,9 +23,7 @@ function ResetPasswordScreen() {
 
   const performPasswordReset = async () => {
     try {
-      const resetPasswordResponse = await AuthAdapter.resetPassword(email);
-
-      console.log(resetPasswordResponse);
+      await AuthAdapter.resetPassword(email);
     } catch (error) {
       let errorMessage = t('login.generic-server-error');
 
