@@ -41,12 +41,13 @@ const HomeScreen = (): JSX.Element => {
 
   return (
     <>
-      <div className="my-8 text-white opacity-50" data-test-id="app-main-heading">
-        Today - Monday, June 15
-      </div>
-
       {surveys.length > 0 && (
         <section>
+          <div className="my-8 text-white" data-test-id="app-main-heading">
+            <p>{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
+            <p className="text-3xl font-extrabold">Today</p>
+          </div>
+
           <SurveyList surveys={surveys} />
         </section>
       )}
