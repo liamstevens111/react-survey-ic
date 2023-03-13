@@ -29,7 +29,7 @@ function Sidebar({ user }: SidebarProps) {
         <span className="pt-2 font-bold text-white">{user.name}</span>
         <img className="cursor-pointer rounded-full" height={36} width={36} src={user.avatarUrl} alt="profile"></img>
       </div>
-      <button onClick={performLogout} className="left-5 text-xl text-white opacity-50">
+      <button onClick={performLogout} className="relative left-5 self-start text-xl text-white opacity-50">
         Logout
       </button>
     </aside>
