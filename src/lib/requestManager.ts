@@ -1,6 +1,6 @@
 import axios, { Method as HTTPMethod, ResponseType, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-import AuthAdapter from 'adapters/authAdapter';
+import SurveyAdapter from 'adapters/surveyAdapter';
 import { setItem, getItem, clearItem } from 'helpers/localStorage';
 
 import { LOGIN_URL } from '../constants';
@@ -59,7 +59,7 @@ const requestManager = (
 
         if (userProfile?.auth?.refresh_token) {
           try {
-            const response = await AuthAdapter.loginWithRefreshToken(userProfile.auth.refresh_token);
+            const response = await SurveyAdapter.loginWithRefreshToken(userProfile.auth.refresh_token);
 
             const { attributes: authInfo } = await response.data;
 
