@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import { AxiosError } from 'axios';
 
@@ -116,9 +116,9 @@ function LoginScreen() {
           />
 
           {/* TODO: Change to React Router Link when implement #17 */}
-          <a href="." className="absolute left-60 top-5 my-8 text-white opacity-50">
+          <Link to="/reset-password" className="absolute left-60 top-5 my-8 text-white opacity-50">
             {t('login.forgot-password')}
-          </a>
+          </Link>
         </div>
         <Button text={t('login.sign-in')} className="h-14 w-80" type="submit" disabled={formSubmitted} />
       </form>
