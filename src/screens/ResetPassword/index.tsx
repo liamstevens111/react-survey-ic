@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { AxiosError } from 'axios';
 
-import AuthAdapter from 'adapters/authAdapter';
+import SurveyAdapter from 'adapters/surveyAdapter';
 import bellNotification from 'assets/images/bell-notification.png';
 import Button from 'components/Button';
 import Input from 'components/Input';
@@ -23,7 +23,7 @@ function ResetPasswordScreen() {
 
   const performPasswordReset = async () => {
     try {
-      await AuthAdapter.resetPassword(email);
+      await SurveyAdapter.resetPassword(email);
     } catch (error) {
       let errorMessage = t('login.generic-server-error');
 

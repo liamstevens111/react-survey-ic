@@ -7,7 +7,7 @@ import userEvent from '@testing-library/user-event';
 import nock from 'nock';
 
 import LoginScreen from '.';
-import AuthAdapter from '../../adapters/authAdapter';
+import SurveyAdapter from '../../adapters/surveyAdapter';
 
 /* eslint-disable camelcase */
 const commonLoginParams = {
@@ -77,7 +77,7 @@ describe('LoginScreen', () => {
   });
 
   test('given an empty email and password in the login form, displays both errors', async () => {
-    const mockLogin = jest.spyOn(AuthAdapter, 'loginWithEmailPassword');
+    const mockLogin = jest.spyOn(SurveyAdapter, 'loginWithEmailPassword');
 
     render(<LoginScreen />, { wrapper: BrowserRouter });
 
@@ -140,7 +140,7 @@ describe('LoginScreen', () => {
   });
 
   test('given INCORRECT credentials, displays the error from the API response', async () => {
-    const mockLogin = jest.spyOn(AuthAdapter, 'loginWithEmailPassword');
+    const mockLogin = jest.spyOn(SurveyAdapter, 'loginWithEmailPassword');
 
     render(<LoginScreen />, { wrapper: BrowserRouter });
 

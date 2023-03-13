@@ -1,6 +1,6 @@
 import nock from 'nock';
 
-import AuthAdapter, { OauthParams } from './authAdapter';
+import SurveyAdapter, { OauthParams } from './surveyAdapter';
 
 /* eslint-disable camelcase */
 const mockLoginCredentials = {
@@ -20,7 +20,7 @@ const commonUserProfileResponse = {
   },
 };
 
-describe('AuthAdapter', () => {
+describe('SurveyAdapter', () => {
   afterAll(() => {
     nock.cleanAll();
     nock.restore();
@@ -41,7 +41,7 @@ describe('AuthAdapter', () => {
         .reply(200);
 
       expect(scope.isDone()).toBe(false);
-      await AuthAdapter.loginWithEmailPassword({ ...mockLoginCredentials });
+      await SurveyAdapter.loginWithEmailPassword({ ...mockLoginCredentials });
       expect(scope.isDone()).toBe(true);
     });
   });
@@ -61,7 +61,7 @@ describe('AuthAdapter', () => {
         .reply(200);
 
       expect(scope.isDone()).toBe(false);
-      await AuthAdapter.loginWithRefreshToken('refresh_token');
+      await SurveyAdapter.loginWithRefreshToken('refresh_token');
       expect(scope.isDone()).toBe(true);
     });
   });
@@ -77,7 +77,7 @@ describe('AuthAdapter', () => {
         .reply(200, { ...commonUserProfileResponse });
 
       expect(scope.isDone()).toBe(false);
-      expect(await AuthAdapter.getUser()).toEqual({ ...commonUserProfileResponse });
+      expect(await SurveyAdapter.getUser()).toEqual({ ...commonUserProfileResponse });
       expect(scope.isDone()).toBe(true);
     });
   });

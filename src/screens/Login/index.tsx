@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 
 import { AxiosError } from 'axios';
 
-import AuthAdapter from 'adapters/authAdapter';
+import SurveyAdapter from 'adapters/surveyAdapter';
 import logo from 'assets/images/logo.svg';
 import Button from 'components/Button';
 import Input from 'components/Input';
@@ -32,13 +32,13 @@ function LoginScreen() {
 
   const performLogin = async () => {
     try {
-      const loginResponse = await AuthAdapter.loginWithEmailPassword({ email: email, password: password });
+      const loginResponse = await SurveyAdapter.loginWithEmailPassword({ email: email, password: password });
 
       const { attributes: authInfo } = await loginResponse.data;
 
       setItem('UserProfile', { auth: authInfo });
 
-      const getUserResponse = await AuthAdapter.getUser();
+      const getUserResponse = await SurveyAdapter.getUser();
 
       const { attributes: userInfo } = await getUserResponse.data;
 

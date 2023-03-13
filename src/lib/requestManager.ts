@@ -1,6 +1,6 @@
 import axios, { Method as HTTPMethod, ResponseType, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
-import AuthAdapter from 'adapters/authAdapter';
+import SurveyAdapter from 'adapters/surveyAdapter';
 import { setItem, getItem, clearItem } from 'helpers/localStorage';
 
 import { LOGIN_URL } from '../constants';
