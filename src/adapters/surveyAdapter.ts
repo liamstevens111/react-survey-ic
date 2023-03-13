@@ -11,7 +11,7 @@ export const commonParams = {
   client_secret: process.env.REACT_APP_API_CLIENT_SECRET,
 };
 /* eslint-enable camelcase */
-class AuthAdapter extends BaseAdapter {
+class SurveyAdapter extends BaseAdapter {
   static loginWithEmailPassword(authParams: LoginAuthType) {
     /* eslint-disable camelcase */
     const requestParams = {
@@ -59,6 +59,10 @@ class AuthAdapter extends BaseAdapter {
   static getUser() {
     return this.prototype.getRequest('me', {});
   }
+
+  static list() {
+    return this.prototype.getRequest('surveys', {});
+  }
 }
 
-export default AuthAdapter;
+export default SurveyAdapter;

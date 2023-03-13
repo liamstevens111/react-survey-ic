@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import AuthAdapter from 'adapters/authAdapter';
+import SurveyAdapter from 'adapters/surveyAdapter';
 import { getItem, clearItem } from 'helpers/localStorage';
 import { User } from 'types/User';
 
@@ -18,7 +18,7 @@ function Sidebar({ user }: SidebarProps) {
     e.stopPropagation();
 
     const accessToken = getItem('UserProfile')?.auth.access_token;
-    await AuthAdapter.logout(accessToken);
+    await SurveyAdapter.logout(accessToken);
     clearItem('UserProfile');
     navigate(LOGIN_URL);
   };
