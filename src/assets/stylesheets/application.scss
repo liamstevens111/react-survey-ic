@@ -18,7 +18,6 @@
 }
 
 html {
-  width: 100%;
   height: 100%;
   margin: 0 auto;
 
@@ -33,4 +32,20 @@ html {
 
 body {
   height: 100%;
+}
+
+.survey-swiper {
+  width: 820px;
+  height: 100%;
+
+  .swiper-pagination-bullet {
+    width: 0.5rem;
+
+    opacity: 0.2;
+    background-color: #fff !important;
+  }
+
+  .swiper-pagination-bullet-active {
+    opacity: 1;
+  }
 }
