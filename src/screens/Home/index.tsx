@@ -36,7 +36,7 @@ const HomeScreen = (): JSX.Element => {
   }, []);
 
   if (!loaded) {
-    return <h3>Loading Surveys</h3>;
+    return <h3 data-test-id="loading-surveys">Loading Surveys</h3>;
   }
 
   return (
@@ -46,9 +46,9 @@ const HomeScreen = (): JSX.Element => {
         <p className="text-3xl font-extrabold">Today</p>
       </div>
 
-      <section className="h-full">
+      <div className="w-screen max-w-3xl">
         <SurveyList surveys={surveys} />
-      </section>
+      </div>
     </section>
   );
 };

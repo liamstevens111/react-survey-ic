@@ -35,9 +35,6 @@ body {
 }
 
 .survey-swiper {
-  width: 820px;
-  height: 100%;
-
   .swiper-pagination-bullet {
     width: 0.5rem;
 
@@ -48,4 +45,20 @@ body {
   .swiper-pagination-bullet-active {
     opacity: 1;
   }
+
+  &.swiper-pagination {
+    bottom: 2rem !important;
+  }
+}
+
+.arrow-button {
+  width: 56px;
+  height: 56px;
+
+  border-radius: 9999px;
+
+  background-color: #fff;
+  background-image: url('../images/arrow.svg');
+  background-repeat: no-repeat;
+  background-position: center;
 }

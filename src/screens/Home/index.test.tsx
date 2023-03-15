@@ -6,9 +6,9 @@ describe('HomeScreen', () => {
   test('renders learn react link', () => {
     render(<HomeScreen />);
 
-    const mainHeadingElement = screen.getByTestId('app-main-heading');
+    const surveyLoadingElement = screen.getByTestId('loading-surveys');
 
-    expect(mainHeadingElement).toBeInTheDocument();
-    expect(mainHeadingElement).toHaveTextContent('Home Screen');
+    expect(surveyLoadingElement).toBeInTheDocument();
+    expect(surveyLoadingElement).toHaveTextContent('Loading Surveys');
   });
 });
