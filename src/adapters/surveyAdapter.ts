@@ -60,8 +60,8 @@ class SurveyAdapter extends BaseAdapter {
     return this.prototype.getRequest('me', {});
   }
 
-  static list() {
-    return this.prototype.getRequest('surveys', {});
+  static list(page: number) {
+    return this.prototype.getRequest(`surveys?page[number]=${page}`, {});
   }
 }
 

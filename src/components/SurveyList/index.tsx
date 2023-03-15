@@ -6,9 +6,9 @@ import 'swiper/swiper-bundle.min.css';
 import SurveyComponent from 'components/Survey';
 import { Survey } from 'types/Survey';
 
-type SurveyListProps = { surveys: Survey[] };
+type SurveyListProps = { surveys: Survey[]; onPageChange: any };
 
-function SurveyList({ surveys }: SurveyListProps) {
+function SurveyList({ surveys, onPageChange }: SurveyListProps) {
   return (
     <>
       <Swiper
@@ -18,14 +18,13 @@ function SurveyList({ surveys }: SurveyListProps) {
         spaceBetween={100}
         pagination={{ el: '.swiper-pagination', clickable: true, dynamicBullets: true }}
         slidesPerView={1}
+        onReachEnd={onPageChange}
       >
         {surveys.map((survey) => {
           return (
-            <>
-              <SwiperSlide key={survey.id}>
-                <SurveyComponent {...survey} />
-              </SwiperSlide>
-            </>
+            <SwiperSlide key={survey.id}>
+              <SurveyComponent {...survey} />
+            </SwiperSlide>
           );
         })}
       </Swiper>
