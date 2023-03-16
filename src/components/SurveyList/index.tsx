@@ -6,7 +6,7 @@ import 'swiper/swiper-bundle.min.css';
 import SurveyComponent from 'components/Survey';
 import { Survey } from 'types/Survey';
 
-type SurveyListProps = { surveys: Survey[]; onPageChange: any };
+type SurveyListProps = { surveys: Survey[]; onPageChange: () => void };
 
 function SurveyList({ surveys, onPageChange }: SurveyListProps) {
   return (
