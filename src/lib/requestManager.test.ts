@@ -1,4 +1,5 @@
 import axios from 'axios';
+// import nock from 'nock';
 
 import requestManager, {
   createRequestSuccessInterceptor,
@@ -29,8 +30,19 @@ const mockUserProfileData = {
   avatar_url: 'https://secure.gravatar.com/avatar/6733d09432e89459dba795de8312ac2d',
 };
 
+// const commonLoginResponse = {
+//   data: {
+//     id: '18339',
+//     type: 'token',
+//     attributes: {
+//       ...mockTokenData,
+//     },
+//   },
+// };
+
 /* eslint-enable camelcase */
 
+/* eslint-disable camelcase */
 describe('requestManager', () => {
   it('fetches successfully data from an API', async () => {
     const responseData = {
@@ -96,13 +108,18 @@ describe('createResponseErrorInterceptor', () => {
   beforeEach(() => {
     clearItem('UserProfile');
 
-    delete global.window.location;
-    window.location = {};
+    global.window = Object.create(window);
+
     Object.defineProperty(window, 'location', {
       value: {
-        href: windowHref,
+        href: jest.fn(),
       },
+      writable: true,
     });
+  });
+
+  afterEach(() => {
+    window.location.href = windowHref;
   });
 
   it('given NON existing tokens and 401 error, redirects to login page', async () => {
@@ -126,9 +143,49 @@ describe('createResponseErrorInterceptor', () => {
       const interceptor = createResponseErrorInterceptor();
       await interceptor(errorResponse);
     } catch (err) {
-      console.log(err);
       expect(err).toBe(errorResponse);
       expect(window.location.href).toEqual(LOGIN_URL);
     }
   });
+
+  // it('given existing refresh token and 401 error, updates access token', async () => {
+  //   setItem('UserProfile', { auth: mockTokenData, user: mockUserProfileData });
+  //   // const requestSpy = jest.spyOn(axios, 'request').mockImplementation(() => Promise.resolve(responseData));
+
+  //   const errorResponse = {
+  //     name: '',
+  //     message: '',
+  //     isAxiosError: true,
+  //     toJSON: () => ({}),
+  //     config: {},
+  //     code: '',
+  //     response: {
+  //       data: {},
+  //       status: 401,
+  //       statusText: '',
+  //       headers: {},
+  //       config: {},
+  //     },
+  //   };
+
+  //   nock(`${process.env.REACT_APP_API_ENDPOINT}`)
+  //     .defaultReplyHeaders({
+  //       'access-control-allow-origin': '*',
+  //       'access-control-allow-credentials': 'true',
+  //       'access-control-allow-headers': 'Authorization',
+  //     })
+  //     .options('/me')
+  //     .reply(204)
+  //     .get('/me')
+  //     .reply(200, { ...commonLoginResponse, attributes: { ...commonLoginResponse.data.attributes, access_token: 'another' } });
+
+  //   try {
+  //     const interceptor = createResponseErrorInterceptor();
+  //     await interceptor(errorResponse);
+  //   } catch (err) {
+  //     expect(err).toBe(errorResponse);
+
+  //     await expect(localStorage.setItem).toHaveBeenLastCalledWith('UserProfile', JSON.stringify({}));
+  //   }
+  // });
 });
