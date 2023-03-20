@@ -29,7 +29,7 @@ export function createResponseErrorInterceptor() {
 
       if (userProfile?.auth?.refresh_token) {
         try {
-          const response = await AuthAdapter.loginWithRefreshToken(userProfile.auth.refresh_token);
+          const response = await SurveyAdapter.loginWithRefreshToken(userProfile.auth.refresh_token);
 
           const { attributes: authInfo } = await response.data;
 
