@@ -16,6 +16,12 @@ jest.mock('axios');
 
 /* eslint-disable camelcase */
 
+// const commonLoginParams = {
+//   grant_type: 'password',
+//   client_id: process.env.REACT_APP_API_CLIENT_ID,
+//   client_secret: process.env.REACT_APP_API_CLIENT_SECRET,
+// };
+
 const mockTokenData = {
   access_token: 'test_access_token',
   refresh_token: 'test_refresh_token',
@@ -23,6 +29,14 @@ const mockTokenData = {
   expires_in: 7200,
   created_at: 1677045997,
 };
+
+// const mockTokenData2 = {
+//   access_token: 'new_access_token',
+//   refresh_token: 'test_refresh_token',
+//   token_type: 'Bearer',
+//   expires_in: 7200,
+//   created_at: 1677045997,
+// };
 
 const mockUserProfileData = {
   email: 'testemail@gmail.com',
@@ -35,7 +49,7 @@ const mockUserProfileData = {
 //     id: '18339',
 //     type: 'token',
 //     attributes: {
-//       ...mockTokenData,
+//       ...mockTokenData2,
 //     },
 //   },
 // };
@@ -148,19 +162,21 @@ describe('createResponseErrorInterceptor', () => {
     }
   });
 
-  // it('given existing refresh token and 401 error, updates access token', async () => {
-  //   setItem('UserProfile', { auth: mockTokenData, user: mockUserProfileData });
-  //   // const requestSpy = jest.spyOn(axios, 'request').mockImplementation(() => Promise.resolve(responseData));
+  // TODO:
+  // it('given existing refresh token and 401 error, updates access token with new', async () => {
+  //   jest.spyOn(localStorage, 'getItem').mockImplementation(() => {
+  //     return JSON.stringify({ auth: mockTokenData, user: mockUserProfileData });
+  //   });
 
   //   const errorResponse = {
   //     name: '',
   //     message: '',
   //     isAxiosError: true,
-  //     toJSON: () => ({}),
+  //     toJSON: () => ({ commonLoginResponse }),
   //     config: {},
   //     code: '',
   //     response: {
-  //       data: {},
+  //       data: { commonLoginResponse },
   //       status: 401,
   //       statusText: '',
   //       headers: {},
@@ -168,16 +184,25 @@ describe('createResponseErrorInterceptor', () => {
   //     },
   //   };
 
+  //   // 1. Mocked nock
+
   //   nock(`${process.env.REACT_APP_API_ENDPOINT}`)
   //     .defaultReplyHeaders({
   //       'access-control-allow-origin': '*',
   //       'access-control-allow-credentials': 'true',
   //       'access-control-allow-headers': 'Authorization',
   //     })
-  //     .options('/me')
-  //     .reply(204)
-  //     .get('/me')
-  //     .reply(200, { ...commonLoginResponse, attributes: { ...commonLoginResponse.data.attributes, access_token: 'another' } });
+  //     .post('/oauth/token', {
+  //       ...commonLoginParams,
+  //       refresh_token: 'test_refresh_token',
+  //     })
+  //     .reply(200, { ...commonLoginResponse });
+
+  //   const storageSetSpy = jest.spyOn(localStorage, 'setItem');
+
+  //   // 2. Mocked Axios
+
+  //   const requestSpy = jest.spyOn(axios, 'request').mockImplementation(() => Promise.resolve(commonLoginResponse));
 
   //   try {
   //     const interceptor = createResponseErrorInterceptor();
@@ -185,7 +210,19 @@ describe('createResponseErrorInterceptor', () => {
   //   } catch (err) {
   //     expect(err).toBe(errorResponse);
 
-  //     await expect(localStorage.setItem).toHaveBeenLastCalledWith('UserProfile', JSON.stringify({}));
+  //     // 3. Called 2 times and with same token from localstorage and not from response
+
+  //     expect(storageSetSpy).toHaveBeenCalledWith(
+  //       'UserProfile',
+  //       JSON.stringify({ auth: mockTokenData2, user: mockUserProfileData })
+  //     );
+
+  //     expect(storageSetSpy).toHaveBeenCalledWith(
+  //       'UserProfile',
+  //       JSON.stringify({ auth: mockTokenData2, user: mockUserProfileData })
+  //     );
   //   }
+
+  //   requestSpy.mockRestore();
   // });
 });
