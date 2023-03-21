@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import AuthAdapter from 'adapters/authAdapter';
+import SurveyAdapter from 'adapters/surveyAdapter';
 import { User } from 'types/User';
 
 import Sidebar from '.';
@@ -37,7 +37,7 @@ describe('Sidebar', () => {
   });
 
   test('renders a sidebar on the page with a logout button that when clicked, calls Logout adapter and removes storage', async () => {
-    const mockLogout = jest.spyOn(AuthAdapter, 'logout');
+    const mockLogout = jest.spyOn(SurveyAdapter, 'logout');
 
     // const mockClearToken = jest.spyOn(myStorage, 'clearItem');
 

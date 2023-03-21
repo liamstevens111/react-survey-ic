@@ -95,7 +95,7 @@ describe('SurveyAdapter', () => {
         .reply(200);
 
       expect(scope.isDone()).toBe(false);
-      expect(await AuthAdapter.logout(token));
+      expect(await SurveyAdapter.logout(token));
       expect(scope.isDone()).toBe(true);
     });
   });
