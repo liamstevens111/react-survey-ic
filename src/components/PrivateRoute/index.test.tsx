@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { MemoryRouter } from 'react-router-dom';
 
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
 
 import PrivateRoute from '.';
 import { setItem, clearItem } from '../../helpers/localStorage';
@@ -41,7 +41,5 @@ describe('PrivateRoute', () => {
     render(<PrivateRoute />, { wrapper: MemoryRouter });
 
     expect(screen.getByTestId('loading')).toHaveTextContent('Loading');
-
-    // expect(screen.getByTestId('loading')).not.toBeVisible();
   });
 });
