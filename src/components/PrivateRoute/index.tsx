@@ -24,7 +24,7 @@ function PrivateRoute() {
   }, []);
 
   if (loading) {
-    return <h3>Loading...</h3>;
+    return <h3 data-test-id="loading">Loading...</h3>;
   }
 
   return user ? (
