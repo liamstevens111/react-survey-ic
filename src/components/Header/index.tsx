@@ -16,12 +16,19 @@ function Header({ user }: HeaderProps) {
       <div>
         <img src={logo} alt="logo"></img>
       </div>
-      <div onClick={() => setSidebarVisible(!sidebarVisible)} role="presentation">
+      <div data-test-id="open-sidebar" onClick={() => setSidebarVisible(!sidebarVisible)} role="presentation">
         {sidebarVisible ? (
           <Sidebar user={user} />
         ) : (
           <div>
-            <img className="cursor-pointer rounded-full" height={36} width={36} src={user.avatarUrl} alt="profile"></img>
+            <img
+              data-test-id="header-avatar"
+              className="cursor-pointer rounded-full"
+              height={36}
+              width={36}
+              src={user.avatarUrl}
+              alt="profile"
+            ></img>
           </div>
         )}
       </div>

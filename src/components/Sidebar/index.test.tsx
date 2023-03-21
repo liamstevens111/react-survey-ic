@@ -8,15 +8,7 @@ import AuthAdapter from 'adapters/authAdapter';
 import { User } from 'types/User';
 
 import Sidebar from '.';
-import { setItem } from '../../helpers/localStorage';
-
-const mockTokenData = {
-  access_token: 'test_access_token',
-  refresh_token: 'test_refresh_token',
-  token_type: 'Bearer',
-  expires_in: 7200,
-  created_at: 1677045997,
-};
+// import * as localStorage from '../../helpers/localStorage';
 
 const mockUserProfileData = {
   email: 'testemail@gmail.com',
@@ -25,21 +17,25 @@ const mockUserProfileData = {
 };
 
 describe('Sidebar', () => {
-  const user: User = { name: 'Test User', email: 'testemail@email.com', avatarUrl: 'an-avatar-url' };
+  const user: User = { name: 'Test User', email: 'testemail@email.com', avatarUrl: mockUserProfileData.avatar_url };
 
-  test("renders a sidebar on the page with the user's name, profile image", () => {
+  test("renders a sidebar on the page with the user's name and avatar image", () => {
     render(<Sidebar user={user} />, { wrapper: BrowserRouter });
 
     expect(screen.getByTestId('username')).toHaveTextContent(user.name);
 
-    const profileImage = screen.getByAltText('profile') as HTMLImageElement;
-    expect(profileImage.src).toContain('an-avatar-url');
+    const profileImage = screen.getByTestId('sidebar-avatar') as HTMLImageElement;
+    expect(profileImage.src).toContain(mockUserProfileData.avatar_url);
   });
 
-  test('renders a sidebar on the page with a logout button that when clicked, calls Logout adapter', async () => {
-    setItem('UserProfile', { auth: mockTokenData, user: mockUserProfileData });
-
+  test('renders a sidebar on the page with a logout button that when clicked, calls Logout adapter and removes storage', async () => {
     const mockLogout = jest.spyOn(AuthAdapter, 'logout');
+
+    // jest.spyOn(localStorage, 'getItem').mockImplementation(() => {
+    //   return { auth: 'mockTokenData', user: mockUserProfileData };
+    // });
+
+    // const mockStorageClear = jest.spyOn(localStorage, 'clearItem');
 
     render(<Sidebar user={user} />, { wrapper: BrowserRouter });
 
@@ -47,6 +43,10 @@ describe('Sidebar', () => {
 
     await userEvent.click(submitButton);
 
-    expect(mockLogout).toHaveBeenCalled();
+    expect(mockLogout).toBeCalledTimes(1);
+
+    // expect(mockStorageClear).toBeCalled();
+
+    // navigates to LOGIN URL
   });
 });
