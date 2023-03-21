@@ -1,4 +1,4 @@
-import { useUser } from 'components/PrivateRoutes';
+import { useUser } from 'components/PrivateRoute';
 
 const HomeScreen = (): JSX.Element => {
   const user = useUser();

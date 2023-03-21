@@ -8,7 +8,7 @@ type ContextType = User;
 
 import { LOGIN_URL } from '../../constants';
 
-function PrivateRoutes() {
+function PrivateRoute() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -31,7 +31,7 @@ function PrivateRoutes() {
   return user ? <Outlet context={user} /> : <Navigate to={LOGIN_URL} />;
 }
 
-export default PrivateRoutes;
+export default PrivateRoute;
 
 export function useUser() {
   return useOutletContext<ContextType>();

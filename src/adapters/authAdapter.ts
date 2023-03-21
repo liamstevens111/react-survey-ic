@@ -6,7 +6,7 @@ type LoginAuthType = {
 };
 
 /* eslint-disable camelcase */
-export const commonParams = {
+export const OauthParams = {
   client_id: process.env.REACT_APP_API_CLIENT_ID,
   client_secret: process.env.REACT_APP_API_CLIENT_SECRET,
 };
@@ -15,7 +15,7 @@ class AuthAdapter extends BaseAdapter {
   static loginWithEmailPassword(authParams: LoginAuthType) {
     /* eslint-disable camelcase */
     const requestParams = {
-      ...commonParams,
+      ...OauthParams,
       ...authParams,
       grant_type: 'password',
     };
@@ -27,7 +27,7 @@ class AuthAdapter extends BaseAdapter {
   static loginWithRefreshToken(refreshToken: string) {
     /* eslint-disable camelcase */
     const requestParams = {
-      ...commonParams,
+      ...OauthParams,
       refresh_token: refreshToken,
       grant_type: 'refresh_token',
     };

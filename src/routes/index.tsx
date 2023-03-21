@@ -1,6 +1,6 @@
 import { RouteObject } from 'react-router-dom';
 
-import PrivateRoutes from 'components/PrivateRoutes';
+import PrivateRoute from 'components/PrivateRoute';
 import HomeScreen from 'screens/Home';
 import LoginScreen from 'screens/Login';
 
@@ -10,7 +10,7 @@ const routes: RouteObject[] = [
     element: <LoginScreen />,
   },
   {
-    element: <PrivateRoutes />,
+    element: <PrivateRoute />,
     children: [
       {
         index: true,

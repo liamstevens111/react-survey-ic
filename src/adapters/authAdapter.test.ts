@@ -1,6 +1,6 @@
 import nock from 'nock';
 
-import AuthAdapter, { commonParams } from './authAdapter';
+import AuthAdapter, { OauthParams } from './authAdapter';
 
 /* eslint-disable camelcase */
 const mockLoginCredentials = {
@@ -35,7 +35,7 @@ describe('AuthAdapter', () => {
         })
         .post('/oauth/token', {
           ...mockLoginCredentials,
-          ...commonParams,
+          ...OauthParams,
           grant_type: 'password',
         })
         .reply(200);
@@ -55,7 +55,7 @@ describe('AuthAdapter', () => {
         })
         .post('/oauth/token', {
           refresh_token: 'refresh_token',
-          ...commonParams,
+          ...OauthParams,
           grant_type: 'refresh_token',
         })
         .reply(200);
