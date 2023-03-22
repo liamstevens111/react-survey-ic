@@ -81,4 +81,22 @@ describe('AuthAdapter', () => {
       expect(scope.isDone()).toBe(true);
     });
   });
+
+  describe('logout', () => {
+    test('The logout endpoint is called', async () => {
+      const token = 'access_token';
+
+      const scope = nock(`${process.env.REACT_APP_API_ENDPOINT}`)
+        .defaultReplyHeaders({
+          'access-control-allow-origin': '*',
+          'access-control-allow-credentials': 'true',
+        })
+        .post('/oauth/revoke')
+        .reply(200);
+
+      expect(scope.isDone()).toBe(false);
+      expect(await AuthAdapter.logout(token));
+      expect(scope.isDone()).toBe(true);
+    });
+  });
 });
