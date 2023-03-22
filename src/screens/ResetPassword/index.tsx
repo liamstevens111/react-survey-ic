@@ -58,7 +58,7 @@ function ResetPasswordScreen() {
 
   return (
     <>
-      <p data-test-id="login-header" className="mb-8 w-80 text-center text-white opacity-50">
+      <p data-test-id="reset-password-header" className="mb-8 w-80 text-center text-white opacity-50">
         {t('reset-password.header')}
       </p>
 
