@@ -33,9 +33,7 @@ export function createResponseErrorInterceptor() {
 
           const { attributes: authInfo } = await response.data;
 
-          /* eslint-disable camelcase */
           setItem('UserProfile', { ...userProfile, auth: authInfo });
-          /* eslint-enable camelcase */
 
           error.config.headers.Authorization = `Bearer ${authInfo.accessToken}`;
           return axios.request(error.config);

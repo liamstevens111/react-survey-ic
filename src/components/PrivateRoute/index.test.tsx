@@ -31,8 +31,6 @@ describe('PrivateRoute', () => {
     render(<PrivateRoute />, { wrapper: MemoryRouter });
 
     expect(localStorage.getItem).toBeCalledWith('UserProfile');
-
-    // expect(screen.getByTestId('app-main-heading'));
   });
 
   test.skip('renders a PrivateRoute', async () => {
