@@ -6,7 +6,7 @@ type LoginAuthType = {
 };
 
 /* eslint-disable camelcase */
-export const commonParams = {
+export const OauthParams = {
   client_id: process.env.REACT_APP_API_CLIENT_ID,
   client_secret: process.env.REACT_APP_API_CLIENT_SECRET,
 };
@@ -15,7 +15,7 @@ class SurveyAdapter extends BaseAdapter {
   static loginWithEmailPassword(authParams: LoginAuthType) {
     /* eslint-disable camelcase */
     const requestParams = {
-      ...commonParams,
+      ...OauthParams,
       ...authParams,
       grant_type: 'password',
     };
@@ -24,10 +24,10 @@ class SurveyAdapter extends BaseAdapter {
     return this.prototype.postRequest('oauth/token', { data: requestParams });
   }
 
-  static loginWithRefreshToken(refreshToken: string) {
+  static refreshAccessToken(refreshToken: string) {
     /* eslint-disable camelcase */
     const requestParams = {
-      ...commonParams,
+      ...OauthParams,
       refresh_token: refreshToken,
       grant_type: 'refresh_token',
     };
@@ -39,7 +39,7 @@ class SurveyAdapter extends BaseAdapter {
   static logout(accessToken: string) {
     /* eslint-disable camelcase */
     const requestParams = {
-      ...commonParams,
+      ...OauthParams,
       token: accessToken,
     };
     /* eslint-enable camelcase */
@@ -49,7 +49,7 @@ class SurveyAdapter extends BaseAdapter {
 
   static resetPassword(email: string) {
     const requestParams = {
-      ...commonParams,
+      ...OauthParams,
       user: { email: email },
     };
 

@@ -46,7 +46,7 @@ describe('SurveyAdapter', () => {
     });
   });
 
-  describe('loginWithRefreshToken', () => {
+  describe('refreshAccessToken', () => {
     test('The refresh token endpoint is called with refresh token from the request', async () => {
       const scope = nock(`${process.env.REACT_APP_API_ENDPOINT}`)
         .defaultReplyHeaders({
@@ -61,7 +61,7 @@ describe('SurveyAdapter', () => {
         .reply(200);
 
       expect(scope.isDone()).toBe(false);
-      await SurveyAdapter.loginWithRefreshToken('refresh_token');
+      await SurveyAdapter.refreshAccessToken('refresh_token');
       expect(scope.isDone()).toBe(true);
     });
   });
@@ -111,7 +111,7 @@ describe('SurveyAdapter', () => {
         .reply(200);
 
       expect(scope.isDone()).toBe(false);
-      expect(await AuthAdapter.resetPassword(mockLoginCredentials.email));
+      expect(await SurveyAdapter.resetPassword(mockLoginCredentials.email));
       expect(scope.isDone()).toBe(true);
     });
   });
