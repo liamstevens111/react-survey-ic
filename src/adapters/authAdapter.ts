@@ -49,7 +49,7 @@ class AuthAdapter extends BaseAdapter {
 
   static resetPassword(email: string) {
     const requestParams = {
-      ...commonParams,
+      ...OauthParams,
       user: { email: email },
     };
 
