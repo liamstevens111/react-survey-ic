@@ -1,0 +1,11 @@
+{
+  "data": {
+    "id": "177",
+    "type": "user",
+    "attributes": {
+      "email": "liam@nimblehq.co",
+      "name": "Team Nimble",
+      "avatar_url": "valid_avatar_url"
+    }
+  }
+}

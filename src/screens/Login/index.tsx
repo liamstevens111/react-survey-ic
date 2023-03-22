@@ -8,7 +8,7 @@ import AuthAdapter from 'adapters/authAdapter';
 import logo from 'assets/images/logo.svg';
 import Button from 'components/Button';
 import Input from 'components/Input';
-import { setToken } from 'helpers/userToken';
+import { setItem } from 'helpers/localStorage';
 import { isEmailValid, isPasswordValid } from 'helpers/validators';
 
 import { PASSWORD_MIN_LENGTH } from '../../constants';
@@ -32,15 +32,17 @@ function LoginScreen() {
 
   const performLogin = async () => {
     try {
-      const response = await AuthAdapter.login({ email: email, password: password });
+      const loginResponse = await AuthAdapter.loginWithEmailPassword({ email: email, password: password });
 
-      const {
-        attributes: { access_token: accessToken, refresh_token: refreshToken },
-      } = await response.data;
+      const { attributes: authInfo } = await loginResponse.data;
 
-      /* eslint-disable camelcase */
-      setToken({ access_token: accessToken, refresh_token: refreshToken });
-      /* eslint-enable camelcase */
+      setItem('UserProfile', { auth: authInfo });
+
+      const getUserResponse = await AuthAdapter.getUser();
+
+      const { attributes: userInfo } = await getUserResponse.data;
+
+      setItem('UserProfile', { auth: authInfo, user: userInfo });
 
       navigate('/');
     } catch (error) {

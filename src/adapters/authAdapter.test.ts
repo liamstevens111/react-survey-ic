@@ -1,19 +1,24 @@
 import nock from 'nock';
 
-import AuthAdapter from './authAdapter';
+import AuthAdapter, { OauthParams } from './authAdapter';
 
 /* eslint-disable camelcase */
-const testCredentials = {
+const mockLoginCredentials = {
   email: 'testemail@gmail.com',
   password: 'password123',
 };
 
-const commonLoginParams = {
-  grant_type: 'password',
-  client_id: process.env.REACT_APP_API_CLIENT_ID,
-  client_secret: process.env.REACT_APP_API_CLIENT_SECRET,
+const commonUserProfileResponse = {
+  data: {
+    id: '1',
+    type: 'user',
+    attributes: {
+      email: 'testemail@gmail.com',
+      name: 'TestName',
+      avatar_url: 'https://secure.gravatar.com/avatar/6733d09432e89459dba795de8312ac2d',
+    },
+  },
 };
-/* eslint-enable camelcase */
 
 describe('AuthAdapter', () => {
   afterAll(() => {
@@ -21,7 +26,7 @@ describe('AuthAdapter', () => {
     nock.restore();
   });
 
-  describe('login', () => {
+  describe('loginWithEmailPassword', () => {
     test('The login endpoint is called with credientials from the request', async () => {
       const scope = nock(`${process.env.REACT_APP_API_ENDPOINT}`)
         .defaultReplyHeaders({
@@ -29,13 +34,50 @@ describe('AuthAdapter', () => {
           'access-control-allow-credentials': 'true',
         })
         .post('/oauth/token', {
-          ...testCredentials,
-          ...commonLoginParams,
+          ...mockLoginCredentials,
+          ...OauthParams,
+          grant_type: 'password',
         })
         .reply(200);
 
       expect(scope.isDone()).toBe(false);
-      await AuthAdapter.login({ ...testCredentials });
+      await AuthAdapter.loginWithEmailPassword({ ...mockLoginCredentials });
+      expect(scope.isDone()).toBe(true);
+    });
+  });
+
+  describe('loginWithRefreshToken', () => {
+    test('The refresh token endpoint is called with refresh token from the request', async () => {
+      const scope = nock(`${process.env.REACT_APP_API_ENDPOINT}`)
+        .defaultReplyHeaders({
+          'access-control-allow-origin': '*',
+          'access-control-allow-credentials': 'true',
+        })
+        .post('/oauth/token', {
+          refresh_token: 'refresh_token',
+          ...OauthParams,
+          grant_type: 'refresh_token',
+        })
+        .reply(200);
+
+      expect(scope.isDone()).toBe(false);
+      await AuthAdapter.loginWithRefreshToken('refresh_token');
+      expect(scope.isDone()).toBe(true);
+    });
+  });
+
+  describe('getUser', () => {
+    test('The user profile endpoint is called and returns user information', async () => {
+      const scope = nock(`${process.env.REACT_APP_API_ENDPOINT}`)
+        .defaultReplyHeaders({
+          'access-control-allow-origin': '*',
+          'access-control-allow-credentials': 'true',
+        })
+        .get('/me')
+        .reply(200, { ...commonUserProfileResponse });
+
+      expect(scope.isDone()).toBe(false);
+      expect(await AuthAdapter.getUser()).toEqual({ ...commonUserProfileResponse });
       expect(scope.isDone()).toBe(true);
     });
   });

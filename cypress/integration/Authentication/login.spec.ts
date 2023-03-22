@@ -7,55 +7,38 @@ describe('User Authentication', () => {
     });
   });
 
-  // TODO: The below test fail on CI/CD with the use of Intercept
-
-  context('given valid credentials', () => {
-    it('redirects to the home page', () => {
-      cy.intercept('POST', '/oauth/token/', {
+  context('login with email and password', () => {
+    it('given correct credentials, redirects to the home page', () => {
+      cy.intercept('POST', 'api/v1/oauth/token', {
         statusCode: 200,
         fixture: 'Authentication/valid-credentials.json',
       });
 
+      cy.intercept('GET', '/api/v1/me', { statusCode: 200, fixture: 'Authentication/logged-in-user.json' });
+
       cy.visit('/login');
 
-      cy.get('input[name=email]').type('liam@nimblehq.co');
-      cy.get('input[name=password]').type('12345678');
+      cy.get('input[name=email]').type('example_email@nimblehq.co');
+      cy.get('input[name=password]').type('ValidPassword');
       cy.get('button[type="submit"]').click();
 
       cy.location().should((location) => {
         expect(location.pathname).to.eq('/');
       });
+
+      cy.findByTestId('app-main-heading').should('be.visible');
     });
-  });
 
-  context('given NO credentials entered', () => {
-    it('shows field validation errors', () => {
-      cy.visit('/login');
-
-      cy.get('button[type="submit"]').click();
-
-      cy.get('.errors').should('be.visible');
-
-      cy.get('.errors').within(() => {
-        cy.contains('Email has invalid format');
-        cy.contains('Password should be at least');
-      });
-    });
-  });
-
-  // TODO: The below test fail on CI/CD with the use of Intercept
-
-  context('given INVALID credentials', () => {
-    it('shows login error', () => {
-      cy.intercept('POST', '/oauth/token/', {
+    it('given INCORRECT credentials, shows login error', () => {
+      cy.intercept('POST', 'api/v1/oauth/token', {
         statusCode: 400,
         fixture: 'Authentication/invalid-credentials.json',
       });
 
       cy.visit('/login');
 
-      cy.get('input[name=email]').type('testemail@gmail.com');
-      cy.get('input[name=password]').type('password123');
+      cy.get('input[name=email]').type('example_email@nimblehq.co');
+      cy.get('input[name=password]').type('InvalidPassword');
       cy.get('button[type="submit"]').click();
 
       cy.location().should((location) => {
@@ -66,6 +49,21 @@ describe('User Authentication', () => {
 
       cy.get('.errors').within(() => {
         cy.findByText('Your email or password is incorrect. Please try again.').should('exist');
+      });
+
+      cy.findByTestId('app-main-heading').should('not.exist');
+    });
+
+    it('given NO credentials entered, shows field validation errors', () => {
+      cy.visit('/login');
+
+      cy.get('button[type="submit"]').click();
+
+      cy.get('.errors').should('be.visible');
+
+      cy.get('.errors').within(() => {
+        cy.contains('Email has invalid format');
+        cy.contains('Password should be at least');
       });
     });
   });
