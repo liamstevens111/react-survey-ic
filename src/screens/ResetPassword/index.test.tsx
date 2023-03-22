@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 import nock from 'nock';
 
 import ResetPasswordScreen from '.';
-import AuthAdapter from '../../adapters/authAdapter';
+import SurveyAdapter from '../../adapters/surveyAdapter';
 
 /* eslint-disable camelcase */
 const commonPasswordResetParams = {
@@ -41,7 +41,7 @@ describe('ResetPasswordScreen', () => {
   });
 
   test('given an empty email in the form, displays error', async () => {
-    const mockResetPassword = jest.spyOn(AuthAdapter, 'resetPassword');
+    const mockResetPassword = jest.spyOn(SurveyAdapter, 'resetPassword');
 
     render(<ResetPasswordScreen />, { wrapper: BrowserRouter });
 

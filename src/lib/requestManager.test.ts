@@ -221,7 +221,7 @@ describe('createResponseErrorInterceptor', () => {
         JSON.stringify({ auth: mockTokenData, user: mockUserProfileData })
       );
 
-      // 4 I can not expect storage to set the new token here as it seems to hit the catch block in the authAdapter
+      // 4 I can not expect storage to set the new token here as it seems to hit the catch block in the SurveyAdapter
       // on the fetching of new access token
     }
 
