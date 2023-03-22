@@ -14,7 +14,7 @@ const mockUserProfileData = {
   avatar_url: 'https://secure.gravatar.com/avatar/6733d09432e89459dba795de8312ac2d',
 };
 
-// TODO: Add re-fetching auth token and calling endpoint when
+// TODO: Add test for expired token for surveys are shown on home page (a further authenticated request required)
 describe('Home', () => {
   context('Authentication token', () => {
     it('with user tokens, displays home page and user header', () => {
