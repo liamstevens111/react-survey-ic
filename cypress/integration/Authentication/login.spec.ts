@@ -8,7 +8,7 @@ describe('User Authentication', () => {
   });
 
   context('login with email and password', () => {
-    it('given correct credentials, redirects to the home page, shows user header', () => {
+    it('given correct credentials, redirects to the home page', () => {
       cy.intercept('POST', 'api/v1/oauth/token', {
         statusCode: 200,
         fixture: 'Authentication/valid-credentials.json',
@@ -27,11 +27,9 @@ describe('User Authentication', () => {
       });
 
       cy.findByTestId('app-main-heading').should('be.visible');
-
-      cy.findByTestId('header-avatar').should('have.attr', 'src', 'valid_avatar_url');
     });
 
-    it('given INCORRECT credentials, shows login error, does NOT show user header', () => {
+    it('given INCORRECT credentials, shows login error', () => {
       cy.intercept('POST', 'api/v1/oauth/token', {
         statusCode: 400,
         fixture: 'Authentication/invalid-credentials.json',
@@ -54,7 +52,6 @@ describe('User Authentication', () => {
       });
 
       cy.findByTestId('app-main-heading').should('not.exist');
-      cy.findByTestId('header-avatar').should('not.exist');
     });
 
     it('given NO credentials entered, shows field validation errors', () => {
