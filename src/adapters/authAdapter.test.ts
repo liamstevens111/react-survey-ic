@@ -99,4 +99,20 @@ describe('AuthAdapter', () => {
       expect(scope.isDone()).toBe(true);
     });
   });
+
+  describe('resetPassword', () => {
+    test('The resetPassword endpoint is called', async () => {
+      const scope = nock(`${process.env.REACT_APP_API_ENDPOINT}`)
+        .defaultReplyHeaders({
+          'access-control-allow-origin': '*',
+          'access-control-allow-credentials': 'true',
+        })
+        .post('/passwords')
+        .reply(200);
+
+      expect(scope.isDone()).toBe(false);
+      expect(await AuthAdapter.resetPassword(mockLoginCredentials.email));
+      expect(scope.isDone()).toBe(true);
+    });
+  });
 });

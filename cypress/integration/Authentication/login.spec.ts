@@ -1,4 +1,4 @@
-describe('User Authentication', () => {
+describe('Login', () => {
   context('upon navigation to /login', () => {
     it('displays login page', () => {
       cy.visit('/login');
