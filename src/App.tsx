@@ -10,7 +10,7 @@ const App = (): JSX.Element => {
 
   return (
     <div>
-      <main className="m-0 flex h-screen flex-col items-center justify-center p-0">{appRoutes}</main>
+      <main className="m-0 flex h-screen w-full flex-col items-center justify-center p-0">{appRoutes}</main>
     </div>
   );
 };

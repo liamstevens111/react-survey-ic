@@ -1,6 +1,6 @@
 import nock from 'nock';
 
-import AuthAdapter, { OauthParams } from './authAdapter';
+import SurveyAdapter, { OauthParams } from './surveyAdapter';
 
 /* eslint-disable camelcase */
 const mockLoginCredentials = {
@@ -20,7 +20,7 @@ const commonUserProfileResponse = {
   },
 };
 
-describe('AuthAdapter', () => {
+describe('SurveyAdapter', () => {
   afterAll(() => {
     nock.cleanAll();
     nock.restore();
@@ -41,12 +41,12 @@ describe('AuthAdapter', () => {
         .reply(200);
 
       expect(scope.isDone()).toBe(false);
-      await AuthAdapter.loginWithEmailPassword({ ...mockLoginCredentials });
+      await SurveyAdapter.loginWithEmailPassword({ ...mockLoginCredentials });
       expect(scope.isDone()).toBe(true);
     });
   });
 
-  describe('loginWithRefreshToken', () => {
+  describe('refreshAccessToken', () => {
     test('The refresh token endpoint is called with refresh token from the request', async () => {
       const scope = nock(`${process.env.REACT_APP_API_ENDPOINT}`)
         .defaultReplyHeaders({
@@ -61,7 +61,7 @@ describe('AuthAdapter', () => {
         .reply(200);
 
       expect(scope.isDone()).toBe(false);
-      await AuthAdapter.loginWithRefreshToken('refresh_token');
+      await SurveyAdapter.refreshAccessToken('refresh_token');
       expect(scope.isDone()).toBe(true);
     });
   });
@@ -77,7 +77,7 @@ describe('AuthAdapter', () => {
         .reply(200, { ...commonUserProfileResponse });
 
       expect(scope.isDone()).toBe(false);
-      expect(await AuthAdapter.getUser()).toEqual({ ...commonUserProfileResponse });
+      expect(await SurveyAdapter.getUser()).toEqual({ ...commonUserProfileResponse });
       expect(scope.isDone()).toBe(true);
     });
   });
@@ -95,7 +95,7 @@ describe('AuthAdapter', () => {
         .reply(200);
 
       expect(scope.isDone()).toBe(false);
-      expect(await AuthAdapter.logout(token));
+      expect(await SurveyAdapter.logout(token));
       expect(scope.isDone()).toBe(true);
     });
   });
@@ -111,7 +111,7 @@ describe('AuthAdapter', () => {
         .reply(200);
 
       expect(scope.isDone()).toBe(false);
-      expect(await AuthAdapter.resetPassword(mockLoginCredentials.email));
+      expect(await SurveyAdapter.resetPassword(mockLoginCredentials.email));
       expect(scope.isDone()).toBe(true);
     });
   });

@@ -18,7 +18,6 @@
 }
 
 html {
-  width: 100%;
   height: 100%;
   margin: 0 auto;
 
@@ -33,4 +32,33 @@ html {
 
 body {
   height: 100%;
+}
+
+.survey-swiper {
+  .swiper-pagination-bullet {
+    width: 0.5rem;
+
+    opacity: 0.2;
+    background-color: #fff !important;
+  }
+
+  .swiper-pagination-bullet-active {
+    opacity: 1;
+  }
+
+  &.swiper-pagination {
+    bottom: 2rem !important;
+  }
+}
+
+.arrow-button {
+  width: 56px;
+  height: 56px;
+
+  border-radius: 9999px;
+
+  background-color: #fff;
+  background-image: url('../images/arrow.svg');
+  background-repeat: no-repeat;
+  background-position: center;
 }
