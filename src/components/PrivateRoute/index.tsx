@@ -37,4 +37,4 @@ function PrivateRoute() {
   );
 }
 
-export default PrivateRoutes;
+export default PrivateRoute;

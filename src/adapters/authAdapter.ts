@@ -39,7 +39,7 @@ class AuthAdapter extends BaseAdapter {
   static logout(accessToken: string) {
     /* eslint-disable camelcase */
     const requestParams = {
-      ...commonParams,
+      ...OauthParams,
       token: accessToken,
     };
     /* eslint-enable camelcase */

@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { MemoryRouter } from 'react-router-dom';
 
-import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import PrivateRoute from '.';
 import { setItem, clearItem } from '../../helpers/localStorage';
@@ -31,14 +31,17 @@ describe('PrivateRoute', () => {
     render(<PrivateRoute />, { wrapper: MemoryRouter });
 
     expect(localStorage.getItem).toBeCalledWith('UserProfile');
+
+    // Only the header is rendered and not the outlet (home page)
+    // expect(screen.getByTestId('app-main-heading')).toBeVisible();
   });
 
   test.skip('renders a PrivateRoute', async () => {
     // Infinite loop
     render(<PrivateRoute />, { wrapper: MemoryRouter });
 
-    await waitForElementToBeRemoved(() => screen.queryAllByTestId('loading'));
+    expect(screen.getByTestId('loading')).toHaveTextContent('Loading');
 
-    expect(screen.getByTestId('loading'));
+    // expect(screen.getByTestId('loading')).not.toBeVisible();
   });
 });
